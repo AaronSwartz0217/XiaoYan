@@ -54,6 +54,27 @@
         .retry-button:active {
             transform: translateY(0);
         }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .retry-button {
+                top: 15px;
+                left: 15px;
+                padding: 10px 20px;
+                font-size: 12px;
+                border-radius: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .retry-button {
+                top: 10px;
+                left: 10px;
+                padding: 8px 16px;
+                font-size: 11px;
+                border-radius: 18px;
+            }
+        }
     </style>
 </head>
 <body>

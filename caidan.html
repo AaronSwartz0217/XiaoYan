@@ -223,20 +223,104 @@
         /* 响应式调整 */
         @media (max-width: 600px) {
             body {
-                padding: 1.5rem 1rem;
+                padding: 1rem 0.5rem;
+            }
+
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .page-title {
+                margin-bottom: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 1.5rem;
             }
 
             .menu-container {
-                padding: 1.5rem;
-                border-radius: 24px;
+                padding: 1rem;
+                border-radius: 20px;
+            }
+
+            .menu-section h2 {
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
             }
 
             .menu-items {
                 grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .menu-item {
+                padding: 0.8rem;
+            }
+
+            .checkbox {
+                width: 18px;
+                height: 18px;
+                margin-right: 8px;
+            }
+
+            .menu-item label, .custom-input {
+                font-size: 13px;
+            }
+
+            .summary-section {
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+            }
+
+            .summary-section h2 {
+                font-size: 1.2rem;
+            }
+
+            .summary-content {
+                padding: 1rem;
+                min-height: 100px;
+            }
+
+            .summary-item {
+                padding: 0.4rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .summary-text {
+                font-size: 13px;
+            }
+
+            .summary-count {
+                font-size: 12px;
+            }
+
+            .confirm-button {
+                padding: 0.8rem;
+                font-size: 14px;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .menu-container {
+                padding: 0.8rem;
+                border-radius: 16px;
             }
 
             .page-title h1 {
-                font-size: 1.8rem;
+                font-size: 1.3rem;
+            }
+
+            .menu-section h2 {
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -372,8 +456,6 @@
             window.location.href = 'bad1.html';
         } else if (premiumCount > 3) {
             window.location.href = 'bad2.html';
-        } else {
-            alert('选择完成！');
         }
     }
 
