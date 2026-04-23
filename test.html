@@ -564,19 +564,22 @@
 
 <script>
     // 预设标准答案
-    const标准答案 = 'ACBABBCACC';
+    const standardAnswers = 'ACBABBCACC';
     
     // 存储用户答案
     const userAnswers = {};
     
     // 初始化事件监听
     function initEventListeners() {
+        console.log('初始化事件监听');
         // 为所有选项添加点击事件
         const options = document.querySelectorAll('.option');
+        console.log('选项数量:', options.length);
         options.forEach(option => {
             option.addEventListener('click', () => {
                 const question = option.dataset.question;
                 const optionValue = option.dataset.option;
+                console.log('选择问题:', question, '选项:', optionValue);
                 
                 // 移除同题目的其他选项的选中状态
                 const siblings = option.parentElement.querySelectorAll('.option');
@@ -589,11 +592,13 @@
                 
                 // 存储用户答案
                 userAnswers[question] = optionValue;
+                console.log('用户答案:', userAnswers);
             });
         });
         
         // 为提交按钮添加点击事件
         const submitButton = document.getElementById('submitButton');
+        console.log('提交按钮:', submitButton);
         submitButton.addEventListener('click', calculateResult);
     }
     
@@ -610,7 +615,7 @@
         // 计算得分
         let score = 0;
         for (let i = 1; i <= 10; i++) {
-            if (userAnswers[i] ===标准答案[i - 1]) {
+            if (userAnswers[i] === standardAnswers[i - 1]) {
                 score++;
             }
         }

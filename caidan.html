@@ -407,22 +407,27 @@
     
     // 初始化事件监听
     function initEventListeners() {
+        console.log('初始化事件监听');
         // 为所有复选框添加点击事件
         const checkboxes = document.querySelectorAll('.checkbox');
+        console.log('复选框数量:', checkboxes.length);
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('click', () => {
                 const itemName = checkbox.dataset.item;
+                console.log('点击复选框:', itemName);
                 if (itemName === 'custom') {
                     handleCustomItem(checkbox);
                 } else {
                     handleRegularItem(checkbox, itemName);
                 }
                 updateSummary();
+                console.log('选中项目:', Array.from(selectedItems));
             });
         });
 
         // 为自定义输入框添加输入事件
         const customInput = document.getElementById('customInput');
+        console.log('自定义输入框:', customInput);
         customInput.addEventListener('input', () => {
             const checkbox = document.querySelector('.checkbox[data-item="custom"]');
             if (checkbox.classList.contains('checked')) {
@@ -432,6 +437,7 @@
 
         // 为确定按钮添加点击事件
         const confirmButton = document.getElementById('confirmButton');
+        console.log('确定按钮:', confirmButton);
         confirmButton.addEventListener('click', handleConfirm);
     }
 
@@ -452,10 +458,17 @@
             }
         });
         
+        console.log('家常菜数量:', homeCookedCount);
+        console.log('精品菜数量:', premiumCount);
+        
         if (homeCookedCount > 3) {
+            console.log('跳转到bad1.html');
             window.location.href = 'bad1.html';
         } else if (premiumCount === 3) {
+            console.log('跳转到bad2.html');
             window.location.href = 'bad2.html';
+        } else {
+            console.log('无跳转');
         }
     }
 
