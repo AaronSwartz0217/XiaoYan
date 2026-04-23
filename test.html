@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🧪 小琰契合度测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #5a3e3e;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9, #f7b05e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #5a3e3e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 测试容器 */
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* 问题样式 */
+        .question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(250, 245, 240, 0.55);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .question-number span {
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #4f3e3e;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        /* 选项样式 */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .option.selected {
+            border-color: #d96c6c;
+            background: rgba(217, 108, 108, 0.1);
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(217, 108, 108, 0.1);
+            color: #d96c6c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 14px;
+            color: #4f3e3e;
+            font-weight: 500;
+        }
+
+        /* 提交按钮 */
+        .submit-button {
+            width: 100%;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(217, 108, 108, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 108, 108, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        /* 结果区域 */
+        .result-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(250, 245, 240, 0.7);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #7a6a6a;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #d96c6c;
+        }
+
+        .result-description {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #4f3e3e;
+            line-height: 1.4;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .page-title {
+                margin-bottom: 1.5rem;
+                margin-top: 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .test-container {
+                padding: 1.5rem;
+                border-radius: 24px;
+            }
+
+            .question {
+                padding: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .question-number {
+                font-size: 1rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .option {
+                padding: 0.8rem;
+            }
+
+            .option-text {
+                font-size: 13px;
+            }
+
+            .submit-button {
+                padding: 1rem;
+                font-size: 14px;
+                margin-top: 1.5rem;
+            }
+
+            .result-section {
+                padding: 1.5rem;
+            }
+
+            .result-title {
+                font-size: 1.3rem;
+            }
+
+            .result-item {
+                padding: 0.8rem;
+            }
+
+            .result-value {
+                font-size: 16px;
+            }
+
+            .result-description {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .test-container {
+                padding: 1rem;
+                border-radius: 20px;
+            }
+
+            .page-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .question {
+                padding: 1rem;
+            }
+
+            .question-text {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-button">← 返回主页</a>
+
+<div class="page-title">
+    <h1>🧪 小琰契合度测试</h1>
+</div>
+
+<div class="test-container">
+    <!-- 问题1 -->
+    <div class="question">
+        <div class="question-number"><span>1</span> 周末早晨醒来，你通常的状态是：</div>
+        <div class="options">
+            <div class="option" data-question="1" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">继续睡到自然醒，无计划</div>
+            </div>
+            <div class="option" data-question="1" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">赖床刷手机，再慢悠悠起来</div>
+            </div>
+            <div class="option" data-question="1" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">按设定时间起床，开启安排</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题2 -->
+    <div class="question">
+        <div class="question-number"><span>2</span> 面对一项不紧急但重要的任务，你习惯：</div>
+        <div class="options">
+            <div class="option" data-question="2" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">提前分解任务，分阶段推进</div>
+            </div>
+            <div class="option" data-question="2" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">等到临近截止日再冲刺完成</div>
+            </div>
+            <div class="option" data-question="2" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">视当时心情和状态灵活安排</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题3 -->
+    <div class="question">
+        <div class="question-number"><span>3</span> 在多人社交场合中，你更常表现为：</div>
+        <div class="options">
+            <div class="option" data-question="3" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">和少数熟人深入交谈</div>
+            </div>
+            <div class="option" data-question="3" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">主动结识新朋友，四处串场</div>
+            </div>
+            <div class="option" data-question="3" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">大多时间安静观察，偶尔发言</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题4 -->
+    <div class="question">
+        <div class="question-number"><span>4</span> 做重要决定时，你最依赖：</div>
+        <div class="options">
+            <div class="option" data-question="4" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">直觉和当下感受</div>
+            </div>
+            <div class="option" data-question="4" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">详细的信息搜集与逻辑分析</div>
+            </div>
+            <div class="option" data-question="4" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">身边信任的人给出的建议</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题5 -->
+    <div class="question">
+        <div class="question-number"><span>5</span> 你认识李东盛吗？</div>
+        <div class="options">
+            <div class="option" data-question="5" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">喜欢</div>
+            </div>
+            <div class="option" data-question="5" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">不认识</div>
+            </div>
+            <div class="option" data-question="5" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">听过</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题6 -->
+    <div class="question">
+        <div class="question-number"><span>6</span> 感到压力或情绪低落时，你更倾向于：</div>
+        <div class="options">
+            <div class="option" data-question="6" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">独自消化，通过运动、书写或听音乐调整</div>
+            </div>
+            <div class="option" data-question="6" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">找人倾诉聊天，说出来会舒服很多</div>
+            </div>
+            <div class="option" data-question="6" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">暂时搁置，先投身其他事情转移注意</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题7 -->
+    <div class="question">
+        <div class="question-number"><span>7</span> 当原定计划被意外打乱时，你的第一反应是：</div>
+        <div class="options">
+            <div class="option" data-question="7" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">烦躁不适，希望尽快回到正轨</div>
+            </div>
+            <div class="option" data-question="7" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">无所谓，顺势调整计划即可</div>
+            </div>
+            <div class="option" data-question="7" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">觉得新鲜有趣，乐于接受变化</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题8 -->
+    <div class="question">
+        <div class="question-number"><span>8</span> 学习一项新技能（如软件、乐器），你偏好的方式是：</div>
+        <div class="options">
+            <div class="option" data-question="8" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">先系统学习理论教程，再动手实践</div>
+            </div>
+            <div class="option" data-question="8" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">直接上手摸索，在试错中学习</div>
+            </div>
+            <div class="option" data-question="8" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">找有经验的人当面示范或手把手教</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题9 -->
+    <div class="question">
+        <div class="question-number"><span>9</span> 在日常消费（非必需品）上，你更接近：</div>
+        <div class="options">
+            <div class="option" data-question="9" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">精打细算，货比三家后再决定</div>
+            </div>
+            <div class="option" data-question="9" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">看眼缘和心情，喜欢就买</div>
+            </div>
+            <div class="option" data-question="9" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">只买明确需要的，其余很少冲动</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 问题10 -->
+    <div class="question">
+        <div class="question-number"><span>10</span> 与人沟通时，你更在意的是：</div>
+        <div class="options">
+            <div class="option" data-question="10" data-option="A">
+                <div class="option-letter">A</div>
+                <div class="option-text">表达清楚自己的观点和逻辑</div>
+            </div>
+            <div class="option" data-question="10" data-option="B">
+                <div class="option-letter">B</div>
+                <div class="option-text">照顾对方的情绪和氛围和谐</div>
+            </div>
+            <div class="option" data-question="10" data-option="C">
+                <div class="option-letter">C</div>
+                <div class="option-text">尽快达成共识，高效结束对话</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提交按钮 -->
+    <button class="submit-button" id="submitButton">提交测试</button>
+
+    <!-- 结果区域 -->
+    <div class="result-section" id="resultSection">
+        <div class="result-title">📊 测试结果</div>
+        <div class="result-item">
+            <div class="result-label">实际得分：</div>
+            <div class="result-value" id="scoreValue">0</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">吻合度：</div>
+            <div class="result-value" id="matchValue">0%</div>
+        </div>
+        <div class="result-item">
+            <div class="result-label">偏差值：</div>
+            <div class="result-value" id="deviationValue">10</div>
+        </div>
+        <div class="result-description" id="resultDescription">
+            <!-- 结果描述将通过JavaScript动态生成 -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // 预设标准答案
+    const标准答案 = 'ACBABBCACC';
+    
+    // 存储用户答案
+    const userAnswers = {};
+    
+    // 初始化事件监听
+    function initEventListeners() {
+        // 为所有选项添加点击事件
+        const options = document.querySelectorAll('.option');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const question = option.dataset.question;
+                const optionValue = option.dataset.option;
+                
+                // 移除同题目的其他选项的选中状态
+                const siblings = option.parentElement.querySelectorAll('.option');
+                siblings.forEach(sibling => {
+                    sibling.classList.remove('selected');
+                });
+                
+                // 标记当前选项为选中
+                option.classList.add('selected');
+                
+                // 存储用户答案
+                userAnswers[question] = optionValue;
+            });
+        });
+        
+        // 为提交按钮添加点击事件
+        const submitButton = document.getElementById('submitButton');
+        submitButton.addEventListener('click', calculateResult);
+    }
+    
+    // 计算测试结果
+    function calculateResult() {
+        // 检查是否所有问题都已回答
+        for (let i = 1; i <= 10; i++) {
+            if (!userAnswers[i]) {
+                alert('请回答所有问题！');
+                return;
+            }
+        }
+        
+        // 计算得分
+        let score = 0;
+        for (let i = 1; i <= 10; i++) {
+            if (userAnswers[i] ===标准答案[i - 1]) {
+                score++;
+            }
+        }
+        
+        // 计算吻合度和偏差值
+        const matchPercentage = (score / 10) * 100;
+        const deviation = 10 - score;
+        
+        // 更新结果显示
+        document.getElementById('scoreValue').textContent = score;
+        document.getElementById('matchValue').textContent = matchPercentage.toFixed(0) + '%';
+        document.getElementById('deviationValue').textContent = deviation;
+        
+        // 生成结果描述
+        let description = '';
+        if (matchPercentage >= 90) {
+            description = '🎉 太棒了！你与小琰的契合度非常高，简直是灵魂伴侣！你们有着相似的思维方式和行为习惯，在一起会非常默契。';
+        } else if (matchPercentage >= 70) {
+            description = '👍 不错！你与小琰的契合度很高，你们有很多共同点，相处起来会很愉快。';
+        } else if (matchPercentage >= 50) {
+            description = '😊 还可以！你与小琰有一定的契合度，虽然有些差异，但这些差异可能会让你们的关系更加有趣。';
+        } else {
+            description = '🤔 你们的契合度还有提升空间，不过差异也是一种美，不妨尝试了解彼此的不同之处。';
+        }
+        
+        document.getElementById('resultDescription').textContent = description;
+        
+        // 显示结果区域
+        document.getElementById('resultSection').classList.add('show');
+        
+        // 滚动到结果区域
+        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // 初始化
+    initEventListeners();
+</script>
+
+</body>
+</html>
