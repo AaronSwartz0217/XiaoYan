@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎡 随机转盘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #5a3e3e;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9, #f7b05e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #5a3e3e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 转盘容器 */
+        .wheel-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 3s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .wheel-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 转盘指针 */
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #d96c6c;
+            z-index: 10;
+        }
+
+        /* 开始按钮 */
+        .spin-button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(217, 108, 108, 0.3);
+        }
+
+        .spin-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 108, 108, 0.4);
+        }
+
+        .spin-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 结果显示 */
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(250, 245, 240, 0.7);
+            border-radius: 16px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .wheel {
+                width: 250px;
+                height: 250px;
+            }
+
+            .wheel-section {
+                font-size: 12px;
+            }
+
+            .spin-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 14px;
+            }
+
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .wheel {
+                width: 200px;
+                height: 200px;
+            }
+
+            .wheel-section {
+                font-size: 10px;
+            }
+
+            .page-title h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-button">← 返回主页</a>
+
+<div class="page-title">
+    <h1>🎡 随机转盘</h1>
+</div>
+
+<div class="wheel-container">
+    <div class="wheel-pointer"></div>
+    <div class="wheel" id="wheel">
+        <!-- 转盘扇区将通过JavaScript生成 -->
+    </div>
+</div>
+
+<button class="spin-button" id="spinButton">开始转盘</button>
+
+<div class="result" id="result">
+    <div class="result-title">结果：</div>
+    <div class="result-text" id="resultText">点击开始</div>
+</div>
+
+<script>
+    // 转盘选项
+    const wheelItems = ['面条', '肯德基', '海底捞', '饭', '麻辣烫', '李东盛'];
+    const colors = ['#d96c6c', '#aa6dc9', '#f7b05e', '#88c999', '#6bb6ff', '#ffb347'];
+    
+    // 初始化转盘
+    function initWheel() {
+        const wheel = document.getElementById('wheel');
+        const sliceAngle = 360 / wheelItems.length;
+        
+        wheelItems.forEach((item, index) => {
+            const section = document.createElement('div');
+            section.className = 'wheel-section';
+            section.style.backgroundColor = colors[index % colors.length];
+            section.style.transform = `rotate(${index * sliceAngle}deg) skewY(${90 - sliceAngle}deg)`;
+            section.style.transformOrigin = 'bottom right';
+            section.textContent = item;
+            wheel.appendChild(section);
+        });
+    }
+    
+    // 初始化事件监听
+    function initEventListeners() {
+        const spinButton = document.getElementById('spinButton');
+        const wheel = document.getElementById('wheel');
+        const resultText = document.getElementById('resultText');
+        
+        spinButton.addEventListener('click', () => {
+            // 禁用按钮
+            spinButton.disabled = true;
+            spinButton.textContent = '转盘ing...';
+            
+            // 随机旋转角度
+            const randomAngle = Math.random() * 360 + 360 * 5; // 至少转5圈
+            wheel.style.transform = `rotate(${randomAngle}deg)`;
+            
+            // 计算结果
+            setTimeout(() => {
+                const normalizedAngle = randomAngle % 360;
+                const sliceAngle = 360 / wheelItems.length;
+                const selectedIndex = Math.floor((360 - normalizedAngle) / sliceAngle) % wheelItems.length;
+                const selectedItem = wheelItems[selectedIndex];
+                
+                // 显示结果
+                resultText.textContent = selectedItem;
+                
+                // 启用按钮
+                spinButton.disabled = false;
+                spinButton.textContent = '开始转盘';
+            }, 3000);
+        });
+    }
+    
+    // 初始化
+    initWheel();
+    initEventListeners();
+</script>
+
+</body>
+</html>

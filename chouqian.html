@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎰 抽签转盘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #5a3e3e;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9, #f7b05e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #5a3e3e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 抽签容器 */
+        .lottery-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .lottery-wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 3s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .lottery-section {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 抽签指针 */
+        .lottery-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #d96c6c;
+            z-index: 10;
+        }
+
+        /* 开始按钮 */
+        .draw-button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(217, 108, 108, 0.3);
+        }
+
+        .draw-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 108, 108, 0.4);
+        }
+
+        .draw-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 结果显示 */
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(250, 245, 240, 0.7);
+            border-radius: 16px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* 概率说明 */
+        .probability-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(250, 245, 240, 0.5);
+            border-radius: 12px;
+            font-size: 12px;
+            color: #7a6a6a;
+            text-align: center;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .lottery-wheel {
+                width: 250px;
+                height: 250px;
+            }
+
+            .lottery-section {
+                font-size: 12px;
+            }
+
+            .draw-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 14px;
+            }
+
+            .back-button {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .probability-info {
+                font-size: 10px;
+                padding: 0.8rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .lottery-wheel {
+                width: 200px;
+                height: 200px;
+            }
+
+            .lottery-section {
+                font-size: 10px;
+            }
+
+            .page-title h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-button">← 返回主页</a>
+
+<div class="page-title">
+    <h1>🎰 抽签转盘</h1>
+</div>
+
+<div class="lottery-container">
+    <div class="lottery-pointer"></div>
+    <div class="lottery-wheel" id="lotteryWheel">
+        <!-- 转盘扇区将通过JavaScript生成 -->
+    </div>
+</div>
+
+<button class="draw-button" id="drawButton">开始抽签</button>
+
+<div class="result" id="result">
+    <div class="result-title">今日运势：</div>
+    <div class="result-text" id="resultText">点击开始</div>
+</div>
+
+<div class="probability-info">
+    概率说明：大大大吉(1%) | 大大吉(5%) | 吉(10%) | 佳(20%) | 还行(40%) | 拉完了(24%)
+</div>
+
+<script>
+    // 抽签选项及概率
+    const lotteryItems = [
+        { name: '大大大吉', probability: 1 },
+        { name: '大大吉', probability: 5 },
+        { name: '吉', probability: 10 },
+        { name: '佳', probability: 20 },
+        { name: '还行', probability: 40 },
+        { name: '拉完了', probability: 24 }
+    ];
+    
+    const colors = ['#d96c6c', '#aa6dc9', '#f7b05e', '#88c999', '#6bb6ff', '#ffb347'];
+    
+    // 初始化转盘
+    function initLotteryWheel() {
+        const wheel = document.getElementById('lotteryWheel');
+        let cumulativeAngle = 0;
+        
+        lotteryItems.forEach((item, index) => {
+            const angle = (item.probability / 100) * 360;
+            const section = document.createElement('div');
+            section.className = 'lottery-section';
+            section.style.backgroundColor = colors[index % colors.length];
+            section.style.transform = `rotate(${cumulativeAngle}deg) skewY(${90 - angle}deg)`;
+            section.style.transformOrigin = 'bottom right';
+            section.textContent = item.name;
+            wheel.appendChild(section);
+            cumulativeAngle += angle;
+        });
+    }
+    
+    // 根据概率获取结果
+    function getLotteryResult() {
+        const random = Math.random() * 100;
+        let cumulativeProbability = 0;
+        
+        for (const item of lotteryItems) {
+            cumulativeProbability += item.probability;
+            if (random <= cumulativeProbability) {
+                return item.name;
+            }
+        }
+        
+        return lotteryItems[lotteryItems.length - 1].name;
+    }
+    
+    // 初始化事件监听
+    function initEventListeners() {
+        const drawButton = document.getElementById('drawButton');
+        const wheel = document.getElementById('lotteryWheel');
+        const resultText = document.getElementById('resultText');
+        
+        drawButton.addEventListener('click', () => {
+            // 禁用按钮
+            drawButton.disabled = true;
+            drawButton.textContent = '抽签ing...';
+            
+            // 随机旋转角度
+            const randomAngle = Math.random() * 360 + 360 * 5; // 至少转5圈
+            wheel.style.transform = `rotate(${randomAngle}deg)`;
+            
+            // 获取结果
+            const result = getLotteryResult();
+            
+            // 显示结果
+            setTimeout(() => {
+                resultText.textContent = result;
+                
+                // 启用按钮
+                drawButton.disabled = false;
+                drawButton.textContent = '开始抽签';
+            }, 3000);
+        });
+    }
+    
+    // 初始化
+    initLotteryWheel();
+    initEventListeners();
+</script>
+
+</body>
+</html>
