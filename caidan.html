@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🍽️ 菜单选择 | 小琰专属</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #5a3e3e;
+        }
+
+        .page-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9, #f7b05e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 返回按钮 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #5a3e3e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 菜单容器 */
+        .menu-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* 菜单项 */
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+
+        .menu-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(217, 108, 108, 0.3);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(250, 245, 240, 0.55);
+            border-radius: 16px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+        }
+
+        .menu-item:hover {
+            background: rgba(250, 245, 240, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 复选框样式 */
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d96c6c;
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox.checked {
+            background: #d96c6c;
+            color: white;
+        }
+
+        .menu-item label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            color: #4f3e3e;
+            font-weight: 500;
+        }
+
+        /* 自定义输入框 */
+        .custom-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #4f3e3e;
+            font-weight: 500;
+            outline: none;
+            padding: 0 5px;
+        }
+
+        /* 总结区域 */
+        .summary-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(217, 108, 108, 0.3);
+        }
+
+        .summary-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3b2b2b;
+            margin-bottom: 1rem;
+        }
+
+        .summary-content {
+            background: rgba(250, 245, 240, 0.55);
+            border-radius: 16px;
+            padding: 1.5rem;
+            min-height: 120px;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .summary-item .checkbox {
+            margin-right: 8px;
+        }
+
+        .summary-text {
+            font-size: 14px;
+            color: #4f3e3e;
+            font-weight: 500;
+        }
+
+        .summary-count {
+            margin-top: 1rem;
+            font-size: 14px;
+            color: #7a6a6a;
+            font-weight: 500;
+        }
+
+        /* 确定按钮样式 */
+        .confirm-button {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(217, 108, 108, 0.3);
+        }
+
+        .confirm-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 108, 108, 0.4);
+        }
+
+        .confirm-button:active {
+            transform: translateY(0);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+
+            .menu-container {
+                padding: 1.5rem;
+                border-radius: 24px;
+            }
+
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-button">← 返回主页</a>
+
+<div class="page-title">
+    <h1>🍽️ 菜单选择</h1>
+</div>
+
+<div class="menu-container">
+    <!-- 家常菜 -->
+    <div class="menu-section">
+        <h2>🍳 家常菜</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <div class="checkbox" data-item="加班"></div>
+                <label>加班</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="熬夜"></div>
+                <label>熬夜</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="调休"></div>
+                <label>调休</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="大小周"></div>
+                <label>大小周</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="出差"></div>
+                <label>出差</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 精品菜 -->
+    <div class="menu-section">
+        <h2>🌟 精品菜</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <div class="checkbox" data-item="旅游"></div>
+                <label>旅游</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="打游戏"></div>
+                <label>打游戏</label>
+            </div>
+            <div class="menu-item">
+                <div class="checkbox" data-item="放假"></div>
+                <label>放假</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 未知菜 -->
+    <div class="menu-section">
+        <h2>❓ 未知菜</h2>
+        <div class="menu-items">
+            <div class="menu-item">
+                <div class="checkbox" data-item="custom"></div>
+                <input type="text" class="custom-input" placeholder="自定义内容..." id="customInput">
+            </div>
+        </div>
+    </div>
+
+    <!-- 总结区域 -->
+    <div class="summary-section">
+        <h2>📋 选择总结</h2>
+        <div class="summary-content" id="summaryContent">
+            <div class="summary-count" id="summaryCount">已选择：0 项</div>
+        </div>
+        <button class="confirm-button" id="confirmButton">确定</button>
+    </div>
+</div>
+
+<script>
+    // 存储选择的项目
+    const selectedItems = new Set();
+    
+    // 初始化事件监听
+    function initEventListeners() {
+        // 为所有复选框添加点击事件
+        const checkboxes = document.querySelectorAll('.checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+                const itemName = checkbox.dataset.item;
+                if (itemName === 'custom') {
+                    handleCustomItem(checkbox);
+                } else {
+                    handleRegularItem(checkbox, itemName);
+                }
+                updateSummary();
+            });
+        });
+
+        // 为自定义输入框添加输入事件
+        const customInput = document.getElementById('customInput');
+        customInput.addEventListener('input', () => {
+            const checkbox = document.querySelector('.checkbox[data-item="custom"]');
+            if (checkbox.classList.contains('checked')) {
+                updateSummary();
+            }
+        });
+
+        // 为确定按钮添加点击事件
+        const confirmButton = document.getElementById('confirmButton');
+        confirmButton.addEventListener('click', handleConfirm);
+    }
+
+    // 处理确定按钮点击
+    function handleConfirm() {
+        const homeCookedItems = ['加班', '熬夜', '调休', '大小周', '出差'];
+        const premiumItems = ['旅游', '打游戏', '放假'];
+        
+        let homeCookedCount = 0;
+        let premiumCount = 0;
+        
+        selectedItems.forEach(item => {
+            if (homeCookedItems.includes(item)) {
+                homeCookedCount++;
+            }
+            if (premiumItems.includes(item)) {
+                premiumCount++;
+            }
+        });
+        
+        if (homeCookedCount > 3) {
+            window.location.href = 'bad1.html';
+        } else if (premiumCount > 3) {
+            window.location.href = 'bad2.html';
+        } else {
+            alert('选择完成！');
+        }
+    }
+
+    // 处理常规菜单项
+    function handleRegularItem(checkbox, itemName) {
+        if (checkbox.classList.contains('checked')) {
+            checkbox.classList.remove('checked');
+            checkbox.textContent = '';
+            selectedItems.delete(itemName);
+        } else {
+            checkbox.classList.add('checked');
+            checkbox.textContent = '✓';
+            selectedItems.add(itemName);
+        }
+    }
+
+    // 处理自定义菜单项
+    function handleCustomItem(checkbox) {
+        if (checkbox.classList.contains('checked')) {
+            checkbox.classList.remove('checked');
+            checkbox.textContent = '';
+            selectedItems.delete('custom');
+        } else {
+            checkbox.classList.add('checked');
+            checkbox.textContent = '✓';
+            selectedItems.add('custom');
+        }
+    }
+
+    // 更新总结区域
+    function updateSummary() {
+        const summaryContent = document.getElementById('summaryContent');
+        const summaryCount = document.getElementById('summaryCount');
+        
+        // 清空总结内容
+        summaryContent.innerHTML = '';
+        
+        // 添加选择的项目
+        let count = 0;
+        selectedItems.forEach(item => {
+            if (item === 'custom') {
+                const customText = document.getElementById('customInput').value || '自定义内容';
+                addSummaryItem(customText);
+                count++;
+            } else {
+                addSummaryItem(item);
+                count++;
+            }
+        });
+        
+        // 添加计数
+        const countElement = document.createElement('div');
+        countElement.className = 'summary-count';
+        countElement.textContent = `已选择：${count} 项`;
+        summaryContent.appendChild(countElement);
+    }
+
+    // 添加总结项
+    function addSummaryItem(text) {
+        const summaryContent = document.getElementById('summaryContent');
+        
+        const summaryItem = document.createElement('div');
+        summaryItem.className = 'summary-item';
+        
+        const checkbox = document.createElement('div');
+        checkbox.className = 'checkbox checked';
+        checkbox.textContent = '✓';
+        
+        const summaryText = document.createElement('span');
+        summaryText.className = 'summary-text';
+        summaryText.textContent = text;
+        
+        summaryItem.appendChild(checkbox);
+        summaryItem.appendChild(summaryText);
+        summaryContent.appendChild(summaryItem);
+    }
+
+    // 初始化
+    initEventListeners();
+</script>
+
+</body>
+</html>
