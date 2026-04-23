@@ -87,6 +87,16 @@
             width: 50%;
             height: 50%;
             transform-origin: bottom right;
+            overflow: hidden;
+        }
+
+        .lottery-section-inner {
+            position: absolute;
+            width: 141.42%; /* 100% * sqrt(2) */
+            height: 141.42%;
+            top: 0;
+            left: 0;
+            transform-origin: 0 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -274,7 +284,13 @@
             section.style.backgroundColor = colors[index % colors.length];
             section.style.transform = `rotate(${cumulativeAngle}deg) skewY(${90 - angle}deg)`;
             section.style.transformOrigin = 'bottom right';
-            section.textContent = item.name;
+            
+            const inner = document.createElement('div');
+            inner.className = 'lottery-section-inner';
+            inner.style.transform = `rotate(${-(90 - angle / 2)}deg) skewY(${-1 * (90 - angle)}deg)`;
+            inner.textContent = item.name;
+            
+            section.appendChild(inner);
             wheel.appendChild(section);
             cumulativeAngle += angle;
         });

@@ -87,6 +87,16 @@
             width: 50%;
             height: 50%;
             transform-origin: bottom right;
+            overflow: hidden;
+        }
+
+        .wheel-section-inner {
+            position: absolute;
+            width: 141.42%; /* 100% * sqrt(2) */
+            height: 141.42%;
+            top: 0;
+            left: 0;
+            transform-origin: 0 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -245,7 +255,13 @@
             section.style.backgroundColor = colors[index % colors.length];
             section.style.transform = `rotate(${index * sliceAngle}deg) skewY(${90 - sliceAngle}deg)`;
             section.style.transformOrigin = 'bottom right';
-            section.textContent = item;
+            
+            const inner = document.createElement('div');
+            inner.className = 'wheel-section-inner';
+            inner.style.transform = `rotate(${-(90 - sliceAngle / 2)}deg) skewY(${-1 * (90 - sliceAngle)}deg)`;
+            inner.textContent = item;
+            
+            section.appendChild(inner);
             wheel.appendChild(section);
         });
     }

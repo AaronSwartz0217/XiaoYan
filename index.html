@@ -330,14 +330,23 @@
             .menu-button {
                 width: 50px;
                 height: 50px;
-                top: 15px;
                 font-size: 14px;
             }
             .menu-button:nth-child(1) {
                 left: 15px;
+                top: 15px;
             }
             .menu-button:nth-child(2) {
                 right: 15px;
+                top: 15px;
+            }
+            .menu-button:nth-child(3) {
+                left: 15px;
+                bottom: 15px;
+            }
+            .menu-button:nth-child(4) {
+                right: 15px;
+                bottom: 15px;
             }
         }
 
@@ -362,14 +371,53 @@
             .menu-button {
                 width: 45px;
                 height: 45px;
-                top: 12px;
                 font-size: 12px;
             }
             .menu-button:nth-child(1) {
                 left: 12px;
+                top: 12px;
             }
             .menu-button:nth-child(2) {
                 right: 12px;
+                top: 12px;
+            }
+            .menu-button:nth-child(3) {
+                left: 12px;
+                bottom: 12px;
+            }
+            .menu-button:nth-child(4) {
+                right: 12px;
+                bottom: 12px;
+            }
+        }
+
+        /* 小屏幕设备额外调整 */
+        @media (max-width: 320px) {
+            .card {
+                padding: 1.2rem 0.8rem;
+                border-radius: 24px;
+            }
+            .hello-text {
+                font-size: 1.6rem;
+            }
+            .name-xiao {
+                font-size: 2rem;
+            }
+            .heart-icon {
+                font-size: 1.6rem;
+            }
+            .sub-message {
+                font-size: 0.9rem;
+                padding: 0.2rem 1rem;
+            }
+            .quote-section {
+                font-size: 0.85rem;
+                padding: 0.5rem 0.8rem;
+            }
+            .menu-button {
+                width: 40px;
+                height: 40px;
+                font-size: 11px;
             }
         }
 
