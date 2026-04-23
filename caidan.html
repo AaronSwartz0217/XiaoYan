@@ -460,6 +460,18 @@
         
         console.log('家常菜数量:', homeCookedCount);
         console.log('精品菜数量:', premiumCount);
+        console.log('选中项目:', Array.from(selectedItems));
+        
+        // 检查特殊结局：只有自定义项且内容为"你好"
+        if (selectedItems.size === 1 && selectedItems.has('custom')) {
+            const customText = document.getElementById('customInput').value.trim();
+            console.log('自定义内容:', customText);
+            if (customText === '做爱') {
+                console.log('跳转到else.1.html');
+                window.location.href = 'else.1.html';
+                return;
+            }
+        }
         
         if (homeCookedCount > 3) {
             console.log('跳转到bad1.html');
@@ -468,7 +480,8 @@
             console.log('跳转到bad2.html');
             window.location.href = 'bad2.html';
         } else {
-            console.log('无跳转');
+            console.log('跳转到good1.html');
+            window.location.href = 'good1.html';
         }
     }
 

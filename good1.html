@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 好结局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9, #f7b05e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            color: #5a3e3e;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .retry-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #d96c6c, #aa6dc9);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(217, 108, 108, 0.3);
+            text-decoration: none;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 108, 108, 0.4);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .retry-button {
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .message {
+                font-size: 0.9rem;
+            }
+
+            .retry-button {
+                padding: 8px 16px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <div class="title">🎉 好结局</div>
+        <div class="message">小琰被你养的很好！</div>
+        <a href="caidan.html" class="retry-button">再点一次</a>
+    </div>
+
+</body>
+</html>
